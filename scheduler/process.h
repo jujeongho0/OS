@@ -1,0 +1,52 @@
+#ifndef __PROCESS_H__
+#define __PROCESS_H__
+
+struct list_head;
+
+enum process_status {
+	PROCESS_READY,		/* Process is ready to run */
+	PROCESS_RUNNING,	/* The process is now running */
+	PROCESS_WAIT,		/* The process is waiting for some resource */
+	PROCESS_EXIT,		/* The process is exited */
+};
+
+struct process {
+	unsigned int pid;		/* Process ID */
+
+	enum process_status status;
+							/* The status of the process */
+
+	unsigned int age;		/* # of ticks since the process was forked */
+	unsigned int lifespan;	/* The lifespan of the process. The process will
+							   be exited with age == lifespan */
+
+	unsigned int prio;		/* Currently effective priority of the process.
+							   0 by default, and the larger, the more important
+							   process it is */
+
+	struct list_head list;	/* list head for listing processes */
+
+	/**
+	 * You might need following(s) to implement PIP
+	 */
+	unsigned int prio_orig;	/* The original priority of the process */
+
+
+	/* DO NOT ACCESS FOLLOWING VARIABLES */
+	unsigned int __starts_at;	/* When to fork the process */
+
+	struct list_head __resources_to_acquire;
+								/* Schedule to acquire resources */
+
+	struct list_head __resources_holding;
+								/* Resources that the process is currently holding */
+};
+
+/**
+ * Support function to dump the process and resource status
+ */
+void dump_status(void);
+
+#define MAX_PRIO	64	/* Maximum value for priority */
+
+#endif
