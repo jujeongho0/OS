@@ -30,7 +30,7 @@ int pop_stack(void)
 	else
 	{	
 		int res = list_first_entry(&stack,struct entry,list)->value;	
-		__list_del_entry(stack.next);
+		__list_del_entry(list_first_entry(&stack,struct entry, list));
 		return res;
 	}	
 	/* Must fix so that it returns the popped value instead of 0 */
